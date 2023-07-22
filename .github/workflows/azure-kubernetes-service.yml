@@ -39,6 +39,7 @@ env:
   RESOURCE_GROUP: "twit_group"
   CLUSTER_NAME: "twit"
   DEPLOYMENT_MANIFEST_PATH: "kubernetes/deployment.yaml"
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   buildImage:
@@ -59,8 +60,8 @@ jobs:
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
-          docker build . -t sshunnarah/twitter-frontend:${{ github.sha }}
-          docker push sshunnarah/twitter-frontend:${{ github.sha }}
+          docker build . -t sshunnarah/twitter-frontend:${{ env.IMAGE_TAG }}
+          docker push sshunnarah/twitter-frontend:${{ env.IMAGE_TAG }}
 
   deploy:
     permissions:
@@ -96,6 +97,13 @@ jobs:
           admin: 'false'
           use-kubelogin: 'true'
 
+      - uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: '${'
+          tokenSuffix: '}'
+          files: '["kubernetes/*.yaml"]'
+        env:
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
       # Deploys application based on given manifest file
       - name: Deploys application
         uses: Azure/k8s-deploy@v4
@@ -103,4 +111,4 @@ jobs:
           action: deploy
           manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
           images: |
-            docker.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
+            docker.io/${{ env.CONTAINER_NAME }}:${{ env.IMAGE_TAG }}
