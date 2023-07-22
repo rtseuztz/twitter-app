@@ -32,13 +32,14 @@ name: Build and deploy an app to AKS
 on:
   push:
     branches: ["main"]
+    paths: ["twitter-frontend/**"]
   workflow_dispatch:
 
 env:
   CONTAINER_NAME: "sshunnarah/twitter-frontend"
   RESOURCE_GROUP: "twit_group"
   CLUSTER_NAME: "twit"
-  DEPLOYMENT_MANIFEST_PATH: "kubernetes/deployment.yaml"
+  DEPLOYMENT_MANIFEST_PATH: "twitter-frontend/kubernetes/deployment.yaml"
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
@@ -60,7 +61,7 @@ jobs:
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
-          docker build . -t sshunnarah/twitter-frontend:${{ env.IMAGE_TAG }}
+          docker build ./twitter-frontend -t sshunnarah/twitter-frontend:${{ env.IMAGE_TAG }}
           docker push sshunnarah/twitter-frontend:${{ env.IMAGE_TAG }}
 
   deploy:
@@ -101,7 +102,7 @@ jobs:
         with:
           tokenPrefix: '${'
           tokenSuffix: '}'
-          files: '["kubernetes/*.yaml"]'
+          files: '["twitter-frontend/kubernetes/*.yaml"]'
         env:
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
       # Deploys application based on given manifest file
