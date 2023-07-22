@@ -24,7 +24,7 @@ spec:
         track: stable
     spec:
       containers:
-        - image: sshunnarah/twitter-frontend:latest
+        - image: sshunnarah/twitter-frontend:${IMAGE_TAG}
           imagePullPolicy: Always
           name: twitter-frontend
           resources: {}
