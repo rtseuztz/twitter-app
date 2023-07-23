@@ -18,6 +18,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  tweets?: Maybe<Array<Tweet>>;
   user?: Maybe<User>;
 };
 
@@ -26,12 +27,20 @@ export type QueryUserArgs = {
   id: Scalars['ID']['input'];
 };
 
+export type Tweet = {
+  __typename?: 'Tweet';
+  id: Scalars['ID']['output'];
+  text?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+};
+
 export type User = {
   __typename?: 'User';
   email?: Maybe<Scalars['String']['output']>;
   friends?: Maybe<Array<Maybe<User>>>;
   id: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  tweets?: Maybe<Array<Tweet>>;
 };
 
 
@@ -109,6 +118,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Tweet: ResolverTypeWrapper<Tweet>;
   User: ResolverTypeWrapper<User>;
 };
 
@@ -118,11 +128,20 @@ export type ResolversParentTypes = {
   ID: Scalars['ID']['output'];
   Query: {};
   String: Scalars['String']['output'];
+  Tweet: Tweet;
   User: User;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  tweets?: Resolver<Maybe<Array<ResolversTypes['Tweet']>>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+};
+
+export type TweetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tweet'] = ResolversParentTypes['Tweet']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  text?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -130,11 +149,13 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   friends?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tweets?: Resolver<Maybe<Array<ResolversTypes['Tweet']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
+  Tweet?: TweetResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

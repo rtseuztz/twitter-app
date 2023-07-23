@@ -4,6 +4,7 @@ const typeDefs = `#graphql
 
 type Query {
   user(id: ID!): User
+  tweets: [Tweet!]
 }
 
 type User {
@@ -12,8 +13,13 @@ type User {
   email: String
   # books: [Book]
   friends: [User]
+  tweets: [Tweet!]
 }
-
+type Tweet {
+  id: ID!
+  text: String
+  user: User
+}
 # type AddTweetMutationResponse {
 #   code: String!
 #   success: Boolean!

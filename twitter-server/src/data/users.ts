@@ -18,19 +18,22 @@ export async function getUserByEmail(email: string): Promise<UserWithPassword | 
     return {
         id: "1",
         email: "ball@gmail.com",
-        password: "password"
+        password: "ball12"
     }
 }
 export function createUserLoader() {
     return new DataLoader<string, User>(async (ids: string[]) => {
         //load all the users
         //use mock data now
-        const users: User[] = [
-            {
-                id: "1",
-                email: "dsadsa@gmail.com"
-            }
-        ]
-        return users
+        return new Promise((resolve, reject) => {
+            const users: User[] = ids.map(id => {
+                return {
+                    id,
+                    email: id + "@gmail.com",
+                    name: `user ${id}`
+                }
+            })
+            resolve(users)
+        })
     })
 }
