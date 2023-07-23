@@ -1,0 +1,20 @@
+
+import type { CodegenConfig } from '@graphql-codegen/cli';
+
+const config: CodegenConfig = {
+  overwrite: true,
+  schema: "src/schema.graphql",
+  generates: {
+    "src/generated/graphql.ts": {
+      plugins: ["typescript", "typescript-resolvers", "typescript-mongodb", "typescript-document-nodes"]
+    },
+    "../twitter-frontend/src/generated/graphql.ts": {
+      plugins: ["typescript"]
+    },
+    "./graphql.schema.json": {
+      plugins: ["introspection"]
+    }
+  }
+};
+
+export default config;
