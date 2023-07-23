@@ -1,5 +1,4 @@
 import { GraphQLResolveInfo } from 'graphql';
-import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -7,6 +6,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -16,39 +16,22 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
-export type AddBookMutationResponse = {
-  __typename?: 'AddBookMutationResponse';
-  book?: Maybe<Book>;
-  code: Scalars['String']['output'];
-  message: Scalars['String']['output'];
-  success: Scalars['Boolean']['output'];
-};
-
-export type Book = {
-  __typename?: 'Book';
-  author?: Maybe<Scalars['String']['output']>;
-  title?: Maybe<Scalars['String']['output']>;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  addBook?: Maybe<AddBookMutationResponse>;
-};
-
-
-export type MutationAddBookArgs = {
-  author?: InputMaybe<Scalars['String']['input']>;
-  title?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type Query = {
   __typename?: 'Query';
-  books?: Maybe<Array<Maybe<Book>>>;
+  user?: Maybe<User>;
 };
 
-export type AdditionalEntityFields = {
-  path?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+
+export type QueryUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type User = {
+  __typename?: 'User';
+  email?: Maybe<Scalars['String']['output']>;
+  friends?: Maybe<Array<Maybe<User>>>;
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -122,111 +105,36 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  AddBookMutationResponse: ResolverTypeWrapper<AddBookMutationResponse>;
-  String: ResolverTypeWrapper<Scalars['String']['output']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  Book: ResolverTypeWrapper<Book>;
-  Mutation: ResolverTypeWrapper<{}>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Query: ResolverTypeWrapper<{}>;
-  AdditionalEntityFields: AdditionalEntityFields;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
+  User: ResolverTypeWrapper<User>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  AddBookMutationResponse: AddBookMutationResponse;
-  String: Scalars['String']['output'];
   Boolean: Scalars['Boolean']['output'];
-  Book: Book;
-  Mutation: {};
+  ID: Scalars['ID']['output'];
   Query: {};
-  AdditionalEntityFields: AdditionalEntityFields;
-};
-
-export type UnionDirectiveArgs = {
-  discriminatorField?: Maybe<Scalars['String']['input']>;
-  additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type UnionDirectiveResolver<Result, Parent, ContextType = any, Args = UnionDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type AbstractEntityDirectiveArgs = {
-  discriminatorField: Scalars['String']['input'];
-  additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type AbstractEntityDirectiveResolver<Result, Parent, ContextType = any, Args = AbstractEntityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type EntityDirectiveArgs = {
-  embedded?: Maybe<Scalars['Boolean']['input']>;
-  additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type EntityDirectiveResolver<Result, Parent, ContextType = any, Args = EntityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type ColumnDirectiveArgs = {
-  overrideType?: Maybe<Scalars['String']['input']>;
-};
-
-export type ColumnDirectiveResolver<Result, Parent, ContextType = any, Args = ColumnDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type IdDirectiveArgs = { };
-
-export type IdDirectiveResolver<Result, Parent, ContextType = any, Args = IdDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type LinkDirectiveArgs = {
-  overrideType?: Maybe<Scalars['String']['input']>;
-};
-
-export type LinkDirectiveResolver<Result, Parent, ContextType = any, Args = LinkDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type EmbeddedDirectiveArgs = { };
-
-export type EmbeddedDirectiveResolver<Result, Parent, ContextType = any, Args = EmbeddedDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type MapDirectiveArgs = {
-  path: Scalars['String']['input'];
-};
-
-export type MapDirectiveResolver<Result, Parent, ContextType = any, Args = MapDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type AddBookMutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddBookMutationResponse'] = ResolversParentTypes['AddBookMutationResponse']> = {
-  book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType>;
-  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = {
-  author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  addBook?: Resolver<Maybe<ResolversTypes['AddBookMutationResponse']>, ParentType, ContextType, Partial<MutationAddBookArgs>>;
+  String: Scalars['String']['output'];
+  User: User;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
+};
+
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  friends?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
-  AddBookMutationResponse?: AddBookMutationResponseResolvers<ContextType>;
-  Book?: BookResolvers<ContextType>;
-  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
 };
 
-export type DirectiveResolvers<ContextType = any> = {
-  union?: UnionDirectiveResolver<any, any, ContextType>;
-  abstractEntity?: AbstractEntityDirectiveResolver<any, any, ContextType>;
-  entity?: EntityDirectiveResolver<any, any, ContextType>;
-  column?: ColumnDirectiveResolver<any, any, ContextType>;
-  id?: IdDirectiveResolver<any, any, ContextType>;
-  link?: LinkDirectiveResolver<any, any, ContextType>;
-  embedded?: EmbeddedDirectiveResolver<any, any, ContextType>;
-  map?: MapDirectiveResolver<any, any, ContextType>;
-};
-
-import { ObjectId } from 'mongodb';

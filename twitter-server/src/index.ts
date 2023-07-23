@@ -1,37 +1,32 @@
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
-import { BooksDataSource } from "./datasources.js";
-import resolvers from "./resolvers/index.js";
+import { expressMiddleware as apolloMiddleware } from "@apollo/server/express4"
+import cors from "cors";
 import { readFileSync } from "fs";
+import express from "express";
+import { authMiddleware, handleLogin } from "./auth.js";
+import resolvers, { ResolverContext } from "./resolvers/index.js";
+import { createUserLoader, getUser } from "./data/users.js";
+import typeDefs from "./typeDefs.js";
 
-// Note: this only works locally because it relies on `npm` routing
-// from the root directory of the project.
-const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" });
+const app = express()
+app.use(cors(), express.json(), authMiddleware)
+app.post("/login", handleLogin)
 
-export interface MyContext {
-    dataSources: {
-        booksAPI: BooksDataSource;
-    };
+// const typeDefs = readFileSync("./schema.graphql", { encoding: "utf-8" });
+
+async function getContext({ req }): Promise<ResolverContext> {
+    const userLoader = createUserLoader()
+    const context: ResolverContext = { userLoader }
+    if (req.auth) {
+        context.user = await getUser(req.auth.sub)
+    }
+    return context;
 }
+const apolloServer = new ApolloServer({ typeDefs, resolvers })
+await apolloServer.start()
+app.use('/graphql', apolloMiddleware(apolloServer, { context: getContext }))
 
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
-const server = new ApolloServer<MyContext>({
-    typeDefs,
-    resolvers,
-});
-
-const { url } = await startStandaloneServer(server, {
-    context: async () => {
-        return {
-            // We are using a static data set for this example, but normally
-            // this would be where you'd add your data source connections
-            // or your REST API classes.
-            dataSources: {
-                booksAPI: new BooksDataSource(),
-            },
-        };
-    },
-});
-
-console.log(`🚀 Server listening at: ${url}`);
+app.listen(3001, () => {
+    console.log("Server is running on port 3001")
+    console.log(`GraphQL endpoint: localhost:3001/graphql`)
+})

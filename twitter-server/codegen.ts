@@ -1,18 +1,15 @@
 
 import type { CodegenConfig } from '@graphql-codegen/cli';
-
+import typeDefs from './src/typeDefs.js';
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "src/schema.graphql",
+  schema: typeDefs,
   generates: {
     "src/generated/graphql.ts": {
-      plugins: ["typescript", "typescript-resolvers", "typescript-mongodb", "typescript-document-nodes"]
+      plugins: ["typescript", "typescript-resolvers"]
     },
     "../twitter-frontend/src/generated/graphql.ts": {
-      plugins: ["typescript"]
-    },
-    "./graphql.schema.json": {
-      plugins: ["introspection"]
+      plugins: ["typescript", "typescript-resolvers"]
     }
   }
 };
