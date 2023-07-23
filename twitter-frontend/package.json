@@ -4,7 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"prod-env": "node -r dotenv/config",
+		"build": "node -r dotenv/config && vite build",
 		"preview": "vite preview",
 		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -26,6 +27,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"dotenv": "^16.3.1",
 		"graphql": "^16.7.1",
 		"graphql-request": "^6.1.0"
 	}
