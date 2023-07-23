@@ -41,6 +41,7 @@ env:
   CLUSTER_NAME: "twit"
   DEPLOYMENT_MANIFEST_PATH: "twitter-frontend/kubernetes/deployment.yaml"
   IMAGE_TAG: ${{ github.sha }}
+  SERVER_URL: ${{ secrets.SERVER_URL }}
 
 jobs:
   buildImage:
