@@ -5,7 +5,7 @@ import { getUserByEmail } from "./data/users.js"
 import 'dotenv/config'
 
 const secretkey = process.env.SECRET_KEY
-const secret = Buffer.from(secretkey, 'base64')
+const secret = "banana"//Buffer.from(secretkey, 'base64')
 export const authMiddleware = expressjwt({
     algorithms: ['HS256'],
     credentialsRequired: false,
