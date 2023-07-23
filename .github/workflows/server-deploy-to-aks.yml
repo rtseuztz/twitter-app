@@ -27,7 +27,7 @@
 # For more samples to get started with GitHub Action workflows to deploy to Azure, refer to https://github.com/Azure/actions-workflow-samples
 # For more options with the actions used below please refer to https://github.com/Azure/login
 
-name: Build and deploy an app to AKS
+name: Build and deploy the node server to AKS
 
 on:
   push:
@@ -41,7 +41,8 @@ env:
   CLUSTER_NAME: "twit"
   DEPLOYMENT_MANIFEST_PATH: "twitter-server/kubernetes/deployment.yaml"
   IMAGE_TAG: ${{ github.sha }}
-  SERVER_URL: ${{ secrets.SERVER_URL }}
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  PASSWORD_HASH: ${{ secrets.PASSWORD_HASH }}
 
 jobs:
   buildImage:
