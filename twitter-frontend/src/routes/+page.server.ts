@@ -1,5 +1,4 @@
 import { request, gql } from 'graphql-request'
-import { SERVER_URL } from '$env/static/private'
 import type { Book } from '../generated/graphql';
 export const load = async () => {
     const document = gql`
@@ -9,6 +8,6 @@ export const load = async () => {
     }
   }
     `
-    const { books }: { books: Book[] } = await request(SERVER_URL, document)
+    const { books }: { books: Book[] } = await request(process.env.SERVER_URL!, document)
     return { books };
 };
