@@ -1,12 +1,16 @@
-FROM node:18-alpine3.17 as build
+FROM node:18-alpine AS builder
 WORKDIR /app
-COPY . /app
-RUN npm install
+COPY package*.json ./
+RUN npm ci
+COPY . .
 RUN npm run build
+RUN npm prune --production
 
-FROM ubuntu
-RUN apt-get update
-RUN apt-get install nginx -y
-COPY --from=build /app/dist /var/www/html/
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/build build/
+COPY --from=builder /app/node_modules node_modules/
+COPY package.json .
 EXPOSE 3000
-CMD ["nginx","-g","daemon off;"]
+ENV NODE_ENV=production
+CMD [ "node", "build" ]
