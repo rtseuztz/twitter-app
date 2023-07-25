@@ -1,8 +1,7 @@
-'use client'
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import ApolloClientWrapper from './apolliClient'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,16 +15,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const client = new ApolloClient({
-    uri: `${process.env.NEXT_PUBLIC_SERVER_URL}/api/graphql/`,
-    cache: new InMemoryCache(),
-  });
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ApolloProvider client={client}>
+        <ApolloClientWrapper>
           {children}
-        </ApolloProvider>
+        </ApolloClientWrapper>
       </body>
     </html>
   )
