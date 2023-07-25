@@ -1,5 +1,12 @@
 <script lang="ts">
     export let data;
+    // import { ApolloClient, InMemoryCache } from "@apollo/client/core";
+    // import { setClient } from "svelte-apollo";
+    // const client = new ApolloClient({
+    //     uri: "http://localhost:5173/api/graphql",
+    //     cache: new InMemoryCache(),
+    // });
+    // setClient(client);
 </script>
 
 <h1>Welcome to my kubernetes app</h1>

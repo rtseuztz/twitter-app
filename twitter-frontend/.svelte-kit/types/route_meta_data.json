@@ -1,5 +1,11 @@
 {
 	"/": [
 		"src/routes/+page.server.ts"
+	],
+	"/api/graphql": [
+		"src/routes/api/graphql/+server.ts"
+	],
+	"/tweets": [
+		"src/routes/tweets/+page.ts"
 	]
 }
