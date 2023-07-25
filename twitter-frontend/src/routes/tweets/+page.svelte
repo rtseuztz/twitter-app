@@ -1,8 +1,8 @@
 <script lang="ts">
     import { client } from "$lib/stores";
     import { gql } from "@apollo/client/core";
-    import { query, setClient } from "svelte-apollo";
-    import type { ReadableQuery } from "svelte-apollo";
+    import { query, setClient } from "svelte-apollo-updated";
+    import type { ReadableQuery } from "svelte-apollo-updated";
     import { onMount } from "svelte";
     setClient($client);
 
