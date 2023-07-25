@@ -28,8 +28,8 @@ spec:
           imagePullPolicy: Always
           name: twitter-frontend
           env:
-            - name: TWITTER_SERVER_URL
-              value: "10.0.164.116:3001"
+            - name: PUBLIC_SERVER_URL
+              value: ${SERVER_URL}
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
