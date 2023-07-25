@@ -62,7 +62,7 @@ jobs:
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
-          docker build ./twitter-frontend -t sshunnarah/twitter-frontend:${{ env.IMAGE_TAG }}
+          DOCKER_BUILDKIT=1 docker build ./twitter-frontend -t sshunnarah/twitter-frontend:${{ env.IMAGE_TAG }}
           docker push sshunnarah/twitter-frontend:${{ env.IMAGE_TAG }}
 
   deploy:
