@@ -13,7 +13,8 @@
 	"include": [
 		"src/**/*",
 		"src/node_modules",
-		".svelte-kit/ambient.d.ts"
+		".svelte-kit/ambient.d.ts",
+		".svelte-kit/types/**/$types.d.ts"
 	]
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

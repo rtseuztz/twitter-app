@@ -27,6 +27,9 @@ spec:
         - image: sshunnarah/twitter-frontend:${IMAGE_TAG}
           imagePullPolicy: Always
           name: twitter-frontend
+          env:
+            - name: PUBLIC_SERVER_URL
+              value: ${SERVER_URL}
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
