@@ -106,6 +106,7 @@ jobs:
           files: '["twitter-frontend/kubernetes/*.yaml"]'
         env:
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          SERVER_URL: ${{ env.SERVER_URL }}
       # Deploys application based on given manifest file
       - name: Deploys application
         uses: Azure/k8s-deploy@v4
